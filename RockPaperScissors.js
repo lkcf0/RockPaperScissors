@@ -1,7 +1,8 @@
 // Score keeping variables //
 let playerScore = 0;
-let compScore =0;
-let gameNum = 0;
+let compScore = 0;
+
+const buttons = document.querySelectorAll('input')
 
 // computer "player" picks a random choice of 'rock, paper or scissors//
 function computerPlay() {
@@ -9,50 +10,55 @@ function computerPlay() {
     return choices[Math.floor(Math.random() * choices.length)];
 }
 
+function disableButtons() {
+    buttons.forEach(elem => {
+        elem.disabled = true
+    })
+}
+
 // function to play a round//
 function playRound(playerSelection) {
-
-// call computerPlay() and store in a variable //
     let computerSelection = computerPlay();
+    let result = ""
     console.log(computerSelection);
 
-// ask play from input and store in parameter//
-
-    playerSelection = prompt('Rock, Paper or Scissors? ' + ' Best of Five! ').toLowerCase();
+// ask player for input and store in parameter//
     if ((playerSelection == 'rock' && computerSelection == 'scissors') ||
        (playerSelection == 'scissors' && computerSelection == 'paper') ||
        (playerSelection == 'paper' && computerSelection == 'rock')) {
-        alert('You win! ' + playerSelection + ' beats ' + computerSelection);
-        playerScore++;
+       
+        playerScore += 1
+        result = ('You Win! ' + playerSelection + ' beats ' + computerSelection + "<br><br>Player Score: " + playerScore + "<br>Computer Score: " + compScore)
+    
+        if (playerScore == 5) {
+            result += '<br><br>You win the game! Press F5 to play again'
+            disableButtons()
+        }
+    
     }
 // if both computer player and player have same result
     else if (playerSelection == computerSelection) {
-        alert('Try again, Its a tie!');
+        result = ('It\s a tie! You both picked ' + playerSelection + "<br><br>Player Score: " + playerScore + "<br>Computer Score: " + compScore)
     }
 
 // when computer wins // 
-    else  
-    {
-        alert('You lose! ' + computerSelection + ' beats ' + playerSelection);
-        compScore++;
+    else  {
+        compScore += 1
+        result = ('You lose! ' + computerSelection + ' beats ' + playerSelection + "<br><br>Player Score: " + playerScore + "<br>Computer score: " + compScore)
+
+        if (compScore == 5) {
+            result += '<br><br>Computer Wins! Press F5 to play again.'
+            disableButtons()
+        }
     }
 
+    document.getElementById('result').innerHTML = result
+    return
+
 }
-// loops game for 5 times // 
-function gameLoop() {
-    for (gameNum = 0; gameNum < 5; gameNum++) {
-        playRound();
-    }   
-}
-// declares the winner of the 5 games// 
-function winner() {
-    if (playerScore < compScore) {
-        console.log('Computer Wins!' + ' with ' + compScore + ' points ' + ' Player Total ' + playerScore);
-    }
-    else if (compScore < playerScore) {
-        console.log('You win!' + ' with ' + playerScore + 'points ' + ' Computer Total ' + compScore);
-    }
-} 
-// calls the game to run and then calls the finally scores//
-gameLoop();
-winner();
+
+buttons.forEach(button =>{
+    button.addEventListener('click', function(){
+        playRound(button.value)
+    })
+})
