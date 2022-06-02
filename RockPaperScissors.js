@@ -2,19 +2,26 @@
 let playerScore = 0;
 let compScore = 0;
 
-const buttons = document.querySelectorAll('input')
-
 // computer "player" picks a random choice of 'rock, paper or scissors//
 function computerPlay() {
     let choices = ['rock', 'paper', 'scissors'];
     return choices[Math.floor(Math.random() * choices.length)];
 }
 
+// adding function to the buttons//
+const buttons = document.querySelectorAll('input')
+
 function disableButtons() {
     buttons.forEach(elem => {
         elem.disabled = true
     })
 }
+
+buttons.forEach(button =>{
+    button.addEventListener('click', function(){
+        playRound(button.value)
+    })
+})
 
 // function to play a round//
 function playRound(playerSelection) {
@@ -56,9 +63,3 @@ function playRound(playerSelection) {
     return
 
 }
-
-buttons.forEach(button =>{
-    button.addEventListener('click', function(){
-        playRound(button.value)
-    })
-})
